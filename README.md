@@ -48,7 +48,7 @@ Now run SolarEcho directly from GitHub:
 pipx run --spec git+https://github.com/Adityachavhan339/SolarEcho solarecho
 ```
 
-If you do not set `NASA_API_KEY`, SolarEcho falls back to NASA's public `DEMO_KEY`, which has much lower request limits than a personal key [web:1][web:168].
+If you do not set `NASA_API_KEY`, SolarEcho falls back to NASA's public `DEMO_KEY`, which has much lower request limits than a personal key.
 
 ## What SolarEcho does
 
