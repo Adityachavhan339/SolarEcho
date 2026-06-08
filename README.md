@@ -1,90 +1,134 @@
 # SolarEcho 🌞🔊
 
-An open-source Python DSP application that transforms real-time NASA space weather data into ambient electronic audio landscapes. Built for the **Stardance Challenge** (NASA × Hack Club).
+SolarEcho is an open-source Python DSP application that transforms live NASA space weather data into ambient electronic audio landscapes.
 
-## 🚀 Run Instantly via pipx (No Cloning Required)
+Built for the Stardance Challenge, it pulls NASA DONKI Coronal Mass Ejection (CME) data and maps live solar values into sound parameters like pitch, loudness, tremolo, and stereo movement.
 
-You can run this project with a single command without downloading any files or setting up virtual environments manualy! Ensure you have `pipx` installed (`sudo apt install pipx`), then execute:
+## Quick Start with pipx
+
+The easiest way to try SolarEcho is with `pipx`, which runs Python applications in isolated environments.
+
+First, make sure `pipx` is installed.
+
+### Ubuntu / Debian
+```bash
+sudo apt install pipx
+pipx ensurepath
+```
+
+### macOS
+```bash
+brew install pipx
+pipx ensurepath
+```
+
+### Windows
+```powershell
+py -m pip install --user pipx
+pipx ensurepath
+```
+
+Then set your NASA API key:
+
+### Linux / macOS
+```bash
+export NASA_API_KEY="your-key-here"
+```
+
+### Windows PowerShell
+```powershell
+$env:NASA_API_KEY="your-key-here"
+```
+
+Now run SolarEcho directly from GitHub:
 
 ```bash
 pipx run --spec git+https://github.com/Adityachavhan339/SolarEcho solarecho
 ```
 
-*Note: Make sure to set your `NASA_API_KEY` environment variable first, or it will default to a public `DEMO_KEY` with restricted request limits.*
+If you do not set `NASA_API_KEY`, SolarEcho falls back to NASA's public `DEMO_KEY`, which has much lower request limits than a personal key [web:1][web:168].
 
-## What it does
+## What SolarEcho does
 
-SolarEcho polls NASA's DONKI database for Coronal Mass Ejection (CME) data, extracts plasma speed and angular width, and turns those numbers into a living drone:
+SolarEcho polls NASA's DONKI database for recent CME events and converts space weather values into audio in real time.
 
-- **Plasma speed (km/s)** → pitch/frequency
-- **CME angular width (°)** → volume/amplitude 
-- **Latitude / Longitude** → stereo panning & tremolo rate
+### Sonification mapping
 
-The result is an immersive, data-driven audio experience representing live solar activity.
+- **Plasma speed (km/s)** → pitch / frequency
+- **CME half-angle (°)** → loudness / amplitude
+- **Latitude** → stereo panning
+- **Longitude** → tremolo speed
 
-## Prerequisites
+This creates a continuously shifting ambient drone based on real solar activity.
 
-If you plan to run the project locally or via `pipx`, ensure your machine has the system-level audio dependencies installed:
+## System dependencies
 
-- **Ubuntu/Debian**: `sudo apt-get install libportaudio2`
-- **macOS**: `brew install portaudio`
-- **Windows**: Built-in, but if errors occur install [ASIO4ALL](https://asio4all.org).
+`pipx` installs the Python package cleanly, but SolarEcho still depends on your operating system's audio stack.
 
-## Local Development Installation
+### Ubuntu / Debian / Linux Mint
+```bash
+sudo apt update
+sudo apt install libportaudio2 portaudio19-dev ffmpeg
+```
 
-If you prefer to clone and tweak the code layout locally:
+### macOS
+```bash
+brew install portaudio ffmpeg
+```
+
+### Windows
+Usually `sounddevice` works directly, but if audio errors occur you may need PortAudio-compatible drivers or additional setup.
+
+## Local development
+
+If you want to clone and modify the project:
 
 ```bash
-# Clone the repository
-git clone https://github.com/Adityachavhan339/SolarEcho/
+git clone https://github.com/Adityachavhan339/SolarEcho.git
 cd SolarEcho
-
-# Install project dependencies
 pip install -r requirements.txt
 ```
 
-## Running Manually
+Then run:
 
-Set your NASA key as an environment variable so you never accidentally commit your private credentials:
-
-### Linux / macOS:
 ```bash
-export NASA_API_KEY="your-key-here"
 python3 -m src.solarecho.main
 ```
 
-### Windows PowerShell:
-```powershell
-$env:NASA_API_KEY="your-key-here"
-python -m src.solarecho.main
-```
-
-Press **Ctrl+C** to stop the audio engine gracefully.
-
-## Project Structure
+## Project structure
 
 ```text
 SolarEcho/
-├── pyproject.toml      # Modern packaging metadata & entrypoint definition
-├── requirements.txt    # Project dependencies listing
-├── README.md           
+├── pyproject.toml
+├── requirements.txt
+├── README.md
 └── src/
     └── solarecho/
-        ├── __init__.py # Package initialization
-        ├── main.py     # Event-loop coordinator & entrypoint
-        ├── nasa_client.py   # Async NASA DONKI telemetry poller (aiohttp)
-        └── synthesizer.py   # Audio synthesis DSP engine (numpy + sounddevice)
+        ├── __init__.py
+        ├── main.py
+        ├── nasa_client.py
+        └── synthesizer.py
 ```
 
-## How the mapping works
+## How to test it
 
+1. Install the system audio dependencies.
+2. Set your NASA API key.
+3. Run the app with `pipx run --spec git+https://github.com/Adityachavhan339/SolarEcho solarecho`
+4. Wait for a CME event line to appear in the terminal.
+5. Listen for the ambient audio output.
 
-| NASA Data Field | Audio Parameter | Mapping Range |
-|-----------------|-----------------|---------------|
-| `speed` (km/s)  | Base frequency  | 200–3000 km/s → 80–880 Hz (logarithmic) |
-| `halfAngle` (°) | Amplitude       | 10–90° → 0.1–1.0 gain |
-| `latitude` (°)  | Stereo pan      | −90° to +90° → left/right |
-| `longitude` (°) | Tremolo speed   | −180° to +180° → 0.5–8 Hz |
-| 10–90° → 0.1–1.0 gain |
-| `latitude` (°)  | Stereo pan      | −90° to +90° → left/right |
-| `longitude` (°) | Tremolo speed   | −180° to +180° → 0.5–8 Hz |
+## Known limitations
+
+- NASA DONKI is polled periodically rather than streamed live.
+- Some CME records may omit fields, so fallback defaults are used.
+- Audio behavior depends on local speaker/output configuration.
+- NASA API usage is rate-limited across `api.nasa.gov` requests [web:1][web:168].
+
+## Why I built this
+
+I wanted to turn scientific telemetry into something people could hear, not just read. SolarEcho explores space weather as a creative medium by combining NASA open data, async Python networking, and real-time digital signal processing.
+
+## License
+
+MIT
