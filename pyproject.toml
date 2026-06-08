@@ -1,0 +1,19 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "solarecho"
+version = "0.1.0"
+description = "Turns live NASA space weather data into ambient electronic sound."
+readme = "README.md"
+requires-python = ">=3.8"
+dependencies = [
+    "numpy",
+    "sounddevice",
+    "aiohttp",
+]
+
+[project.scripts]
+solarecho = "solarecho.main:run_app"
+
