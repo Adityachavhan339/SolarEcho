@@ -4,6 +4,8 @@ SolarEcho is an open-source Python DSP application that transforms live NASA spa
 
 Built for the Stardance Challenge, it pulls NASA DONKI Coronal Mass Ejection (CME) data and maps live solar values into sound parameters like pitch, loudness, tremolo, and stereo movement.
 
+<img width="1366" height="768" alt="1000061925" src="https://github.com/user-attachments/assets/7f1a00ff-bf7b-4edd-a36a-d022a6071f00" />
+
 ## Quick Start with pipx
 
 The easiest way to try SolarEcho is with `pipx`, which runs Python applications in isolated environments.
