@@ -7,7 +7,7 @@ An open-source Python DSP application that transforms real-time NASA space weath
 You can run this project with a single command without downloading any files or setting up virtual environments manualy! Ensure you have `pipx` installed (`sudo apt install pipx`), then execute:
 
 ```bash
-pipx run --spec git+https://github.com solarecho
+pipx run --spec git+https://github.com/Adityachavhan339/SolarEcho solarecho
 ```
 
 *Note: Make sure to set your `NASA_API_KEY` environment variable first, or it will default to a public `DEMO_KEY` with restricted request limits.*
